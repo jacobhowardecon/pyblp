@@ -1,0 +1,286 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Jacob's Notes:
+\end_layout
+
+\begin_layout Enumerate
+For 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+solve_supply
+\end_layout
+
+\end_inset
+
+/
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+solve_demand
+\end_layout
+
+\end_inset
+
+ file: 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+markets/problem_market.py 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+solve_supply
+\end_layout
+
+\end_inset
+
+ relies on function 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+safely_compute_tilde_costs
+\end_layout
+
+\end_inset
+
+ which is also defined in 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+problem_market.py
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+safely_compute_tilde_costs
+\end_layout
+
+\end_inset
+
+ relies on function 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+compute_eta
+\end_layout
+
+\end_inset
+
+ file: markets/market.py
+\end_layout
+
+\begin_layout Enumerate
+compute_eta
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+There is also a compute_eta_by_theta_jacobian function also in markets.py.
+ Not sure where this comes in to play
+\end_layout
+
+\end_inset
+
+ is where the key supply solving takes place.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Key bit of code:
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+utility_derivatives = self.compute_utility_derivatives('prices')
+\end_layout
+
+\begin_layout Plain Layout
+
+probabilities, conditionals = self.compute_probabilities(delta) 
+\end_layout
+
+\begin_layout Plain Layout
+
+jacobian = self.compute_shares_by_variable_jacobian(utility_derivatives,
+ probabilities, conditionals)
+\end_layout
+
+\begin_layout Plain Layout
+
+capital_delta = -ownership_matrix * jacobian
+\end_layout
+
+\begin_layout Plain Layout
+
+eta, replacement = approximately_solve(capital_delta, self.products.shares)
+\end_layout
+
+\end_inset
+
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Note that 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+approximately_solve(a,b)
+\end_layout
+
+\end_inset
+
+ solves the following linear algebra problem: 
+\begin_inset Formula $a=x\cdot b$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+If we want to convert to Cournot: 
+\end_layout
+
+\begin_layout Standard
+Change the jacobian: calculated in compute_shares_by_variable_jacobian 
+\end_layout
+
+\begin_layout Standard
+If we want to allow double marginalization we need to calculate the extra
+ capital_delta term from Gayle paper.
+ 1.
+ First steps is to create 2 modified ownership_matrix objects/functions:
+ 1 for up stream
+\end_layout
+
+\end_body
+\end_document
